@@ -20,7 +20,7 @@ public class Network {
     public static final byte GMS2_ENDING = 0x00;
 
     /**
-     * Puts a String whithin a ByteBuffer. Be careful, it also puts an int just
+     * Puts a String within a ByteBuffer. Be careful, it also puts an int just
      * before the String, corresponding to the String length.
      * 
      * @param buffer (ByteBuffer) buffer where to put the String.
@@ -31,6 +31,19 @@ public class Network {
         buffer.putInt(strLength);
         byte[] strB = string.getBytes(StandardCharsets.UTF_8);
         buffer.put(strB);
+    }
+
+    /**
+     * Puts a String within a ByteBuffer. Be careful, it also puts an int just
+     * before the String, corresponding to the String length.
+     * The String will be under the GameMaker format, ending with 0x00.
+     * 
+     * @param buffer (ByteBuffer) buffer where to put the String.
+     * @param string (String) String to add to the ByteBuffer.
+     */
+    public static void putStringGMS2(ByteBuffer buffer, String string) {
+        Network.putString(buffer, string);
+        buffer.put((byte) 0x00);
     }
 
     /**
@@ -48,8 +61,27 @@ public class Network {
     }
 
     /**
-     * Handle and process a {@link GameEvent}. This event must correspond to a NetworkEvent.
+     * Reads a String from a ByteBuffer. Be careful, it needs an int just before the
+     * String, specifing the String length.
+     * The String must be under the GameMaker format, ending with 0x00.
+     * 
+     * @param buffer (ByteBuffer) from where to read the String.
+     * @return (String) the String read.
+     * @throws IllegalArgumentException if the String does not end with 0x00.
+     */
+    public static String getStringGMS2(ByteBuffer buffer) {
+        String res = Network.getString(buffer);
+        if (buffer.get() != (byte) 0x00) {
+            throw new IllegalArgumentException();
+        }
+        return res;
+    }
+
+    /**
+     * Handle and process a {@link GameEvent}. This event must correspond to a
+     * NetworkEvent.
      * TODO
+     * 
      * @param event (GameEvent) event to handle and process.
      * @see {@link Session#getEvent(ByteBuffer)}.
      * @see {@link EventDecoder}.

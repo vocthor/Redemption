@@ -59,7 +59,7 @@ public abstract class Actor {
         buffer.putLong(UUID.getLeastSignificantBits());
         // On met la class de l'objet (qui extends Actor)
         String srcClass = this.getClass().getSimpleName();
-        Network.putString(buffer, srcClass);
+        Network.putStringGMS2(buffer, srcClass);
         // On met les coordonnées
         buffer.putInt(positionX);
         buffer.putInt(positionY);
