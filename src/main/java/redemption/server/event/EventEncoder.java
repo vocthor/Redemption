@@ -31,18 +31,16 @@ public class EventEncoder {
      * @param buffer (ByteBuffer) buffer where to add the states.
      * @param actors (List of {@link Actor}) actors from whom to add the state in
      *               the buffer.
-     * @return (int) the number of bytes added to the buffer.
+     add* @return (int) the number of bytes added to the buffer.
      * @see {@link Actor#getState()}.
      */
     public static int addState(ByteBuffer buffer, List<? extends Actor> actors) {
         int pos = buffer.position();
         for (Actor a : actors) {
-            int tmpPos = buffer.position();
             ByteBuffer stateA = a.getState();
             int posA = stateA.position();
             buffer.put(stateA.array(), 0, posA); // byte[] because no need to look at the ByteBuffer
                                                  // position
-            buffer.position(tmpPos + posA); // Black magic to put the position at the correct value
         }
         return buffer.position() - pos;
     }
