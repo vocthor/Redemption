@@ -1,6 +1,5 @@
 package redemption.server.event;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import redemption.server.game.Actor;
@@ -61,7 +60,7 @@ public abstract class GameEvent {
      * @param controller (GameController) controller
      * @return (List of {@link Actor}) actors modified by this event.
      */
-    public abstract List<Actor> processEvent(GameController controller);
+    public abstract List<? extends Actor> processEvent(GameController controller);
 
     /**
      * Getter of {@link GameEvent#session}.

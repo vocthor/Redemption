@@ -2,9 +2,11 @@ package redemption.server.event;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import redemption.server.event.impl.DamageEvent;
 import redemption.server.event.impl.MoveEvent;
+import redemption.server.utilities.Utilities;
 
 /**
  * Class used to transform data into the corresponding event.
@@ -12,6 +14,7 @@ import redemption.server.event.impl.MoveEvent;
  * @see {@link EventType}.
  */
 public class EventDecoder {
+
     /**
      * Type of the event.
      * 
@@ -59,7 +62,8 @@ public class EventDecoder {
 
     private static GameEvent handleAttack(ByteBuffer buffer) {
         DamageEvent damageEvent = new DamageEvent(type);
-        damageEvent.setDmg(buffer.get());
+        damageEvent.setTargetUUID(Utilities.getUUID(buffer));
+        damageEvent.setDmg(buffer.getInt());
         System.out.println("Attack");
         return damageEvent;
     }
