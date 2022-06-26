@@ -43,7 +43,7 @@ public class Session {
     }
 
     /**
-     * Connects {@link Session#client} to a controller and creates him a player.
+     * Connects {@link #client} to a controller and creates him a player.
      * 
      * @param ctr (GameController) game instance where the client is playing.
      * @throws Exception if the client is already in another game.
@@ -58,7 +58,7 @@ public class Session {
     }
 
     /**
-     * Disconnects {@link Session#client} from {@link Session#controller}.
+     * Disconnects {@link #client} from {@link #controller}.
      */
     public void disconnectFromGame() {
         inGame = false;
@@ -72,7 +72,7 @@ public class Session {
 
     /**
      * Wrap the param into a ByteBuffer, and sends it to
-     * {@link Session#getEvent(ByteBuffer)}.
+     * {@link #getEvent(ByteBuffer)}.
      * 
      * @param buffer (byte[]) buffer.
      */
@@ -82,8 +82,8 @@ public class Session {
     }
 
     /**
-     * Transform data into a {@link GameEvent}. According to {@link Session#inGame},
-     * the event will then be handled either by the {@link Session#controller}, or
+     * Transform data into a {@link GameEvent}. According to {@link #inGame},
+     * the event will then be handled either by the {@link #controller}, or
      * by a {@link Network} function.
      * 
      * @param buffer (ByteBuffer) data to process.
@@ -115,7 +115,7 @@ public class Session {
     // }
 
     /**
-     * Sends data back to {@link Session#client}.
+     * Sends data back to {@link #client}.
      * 
      * @param buffer (ByteBuffer) data to send back.
      */
@@ -124,7 +124,7 @@ public class Session {
     }
 
     /**
-     * Getter of {@link Session#player}.
+     * Getter of {@link #player}.
      * 
      * @return (Player) player associated to this Session.
      */
@@ -133,7 +133,7 @@ public class Session {
     }
 
     /**
-     * Getter of {@link Session#client}.
+     * Getter of {@link #client}.
      * 
      * @return (GameClient) client associated to this Session.
      */
