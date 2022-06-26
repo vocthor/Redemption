@@ -3,7 +3,6 @@ package redemption.server.game;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-import redemption.server.server.Network;
 import redemption.server.utilities.Utilities;
 
 /**
@@ -72,7 +71,7 @@ public abstract class Actor {
      *         already put.
      */
     public ByteBuffer getState() {
-        ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
+        ByteBuffer buffer = Utilities.newBuffer();
         // On met l'UUID dans le buffer sous forme de 2 long
         Utilities.putUUID(buffer, UUID);
         // On met la class de l'objet (qui extends Actor)

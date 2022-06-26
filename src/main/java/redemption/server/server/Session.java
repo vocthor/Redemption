@@ -7,6 +7,7 @@ import redemption.server.event.EventDecoder;
 import redemption.server.event.GameEvent;
 import redemption.server.game.GameController;
 import redemption.server.game.actors.Player;
+import redemption.server.utilities.Utilities;
 
 /**
  * A Session is an intermadiate class between {@link GameClient} and
@@ -71,8 +72,9 @@ public class Session {
      * 
      * @param buffer (byte[]) buffer.
      */
-    public void getEvent(byte[] buffer) {
-        getEvent(ByteBuffer.wrap(buffer));
+    public void getEvent(byte[] buf) {
+        ByteBuffer buffer = Utilities.newBuffer(buf);
+        getEvent(buffer);
     }
 
     /**

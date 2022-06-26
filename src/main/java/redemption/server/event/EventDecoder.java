@@ -2,7 +2,6 @@ package redemption.server.event;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 import redemption.server.event.impl.DamageEvent;
 import redemption.server.event.impl.MoveEvent;

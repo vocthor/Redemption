@@ -4,12 +4,42 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import redemption.server.server.Network;
+
 public class Utilities {
 
     /**
      * GameMaker Studio 2 uses a special character to end Strings (just like C).
      */
     public static final byte GMS2_ENDING = 0x00;
+
+    /**
+     * Creates a new ByteBuffer with a size of {@link Network#BUFFER_SIZE} bytes.
+     * This buffer uses {@link Network#ENDIAN} endianness. This buffer is empty with the
+     * position at 0.
+     * 
+     * @return the newly created ByteBuffer.
+     */
+    public static ByteBuffer newBuffer() {
+        ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
+        buffer.order(Network.ENDIAN);
+        return buffer;
+    }
+
+    /**
+     * Creates a new ByteBuffer with a size of {@link Network#BUFFER_SIZE} bytes.
+     * This buffer uses {@link Network#ENDIAN} endianness. This buffer is not empty,
+     * containing the byte array parameter.
+     * 
+     * @param buf (byte []) array of bytes to convert into a ByteBuffer.
+     * @return the newly created ByteBuffer.
+     */
+    public static ByteBuffer newBuffer(byte[] buf) {
+        ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
+        buffer.order(Network.ENDIAN);
+        buffer.put(buf);
+        return buffer;
+    }
 
     /**
      * Puts a String within a ByteBuffer. Be careful, it also puts an int just
@@ -68,11 +98,13 @@ public class Utilities {
         }
         return res;
     }
-    
+
     /**
+     * Puts an {@link UUID} into a ByteBuffer. The most significant bits are first,
+     * then comes the least significant ones.
      * 
-     * @param buffer
-     * @param uuid
+     * @param buffer (ByteBuffer) buffer where to put the UUID.
+     * @param uuid   (UUID) UUID to add to the ByteBuffer.
      */
     public static void putUUID(ByteBuffer buffer, UUID uuid) {
         // On met l'UUID dans le buffer sous forme de 2 long
@@ -81,9 +113,11 @@ public class Utilities {
     }
 
     /**
+     * Reads an UUID from a ByteBuffer. Be careful, the most significant bits are
+     * read first, then the least significant ones.
      * 
-     * @param buffer
-     * @return
+     * @param buffer (ByteBuffer) from where to read the UUID.
+     * @return (UUID) the UUID read.
      */
     public static UUID getUUID(ByteBuffer buffer) {
         long mostUUID = buffer.getLong();

@@ -4,15 +4,14 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import redemption.server.event.EventEncoder;
 import redemption.server.event.GameEvent;
 import redemption.server.game.actors.Player;
 import redemption.server.server.GameServer;
-import redemption.server.server.Network;
 import redemption.server.server.Session;
+import redemption.server.utilities.Utilities;
 
 /**
  * Controller of the game 'Redemption'. Each controller should be specific to
@@ -60,7 +59,7 @@ public class GameController {
     public void handleEvent(GameEvent event) {
         List<? extends Actor> modifiedActors = event.processEvent(this);
         // MegaPacket containing all the states
-        ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
+        ByteBuffer buffer = Utilities.newBuffer();
         EventEncoder.addState(buffer, modifiedActors);
         sessions.forEach((s) -> s.sendToClient(buffer));
     }
