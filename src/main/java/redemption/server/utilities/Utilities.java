@@ -38,6 +38,7 @@ public class Utilities {
         ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
         buffer.order(Network.ENDIAN);
         buffer.put(buf);
+        buffer.position(0);
         return buffer;
     }
 

@@ -62,8 +62,12 @@ public class Session {
      */
     public void disconnectFromGame() {
         inGame = false;
-        controller = null;
         controller.removeSession(this);
+        controller = null;
+    }
+
+    public void close() {
+        disconnectFromGame();
     }
 
     /**
