@@ -75,11 +75,7 @@ public class GameClient extends Thread {
                 if (nbByte > 0) {
                     // On yeet gameEvent a la session
                     session.getEvent(buffer);
-                    // clientPlayer.getController().receive(gameEvent);
-                    // System.out.println(gameEvent);
                 }
-                // System.out.println(new String(buffer, StandardCharsets.UTF_8));
-                // send(buffer);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,7 +86,9 @@ public class GameClient extends Thread {
             // Si pb on ferme le Socket
             try {
                 socket.close();
+                session.close();
             } catch (IOException e1) {
+                System.err.println("The client socket couldn't be closed !");
                 e1.printStackTrace();
             }
         }

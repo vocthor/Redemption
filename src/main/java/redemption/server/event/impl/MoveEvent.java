@@ -1,6 +1,5 @@
 package redemption.server.event.impl;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class MoveEvent extends GameEvent {
     }
 
     @Override
-    public List<Actor> processEvent(GameController controller) {
+    public List<? extends Actor> processEvent(GameController controller) {
         getPlayer().move(deltaX, deltaY);
         return Arrays.asList(getPlayer());
     }

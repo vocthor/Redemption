@@ -3,7 +3,7 @@ package redemption.server.game;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-import redemption.server.server.Network;
+import redemption.server.utilities.Utilities;
 
 /**
  * An Actor represents an entity within the game.
@@ -29,7 +29,7 @@ public abstract class Actor {
     }
 
     /**
-     * Getter of {@link Actor#controller}.
+     * Getter of {@link #controller}.
      * 
      * @return (GameController) controller associated to this Actor.
      */
@@ -38,12 +38,30 @@ public abstract class Actor {
     }
 
     /**
-     * Setter of {@link Actor#controller}.
+     * Setter of {@link #controller}.
      * 
      * @param controller (GameController) controller associated to this Actor.
      */
     public void setController(GameController controller) {
         this.controller = controller;
+    }
+
+    /**
+     * Getter of {@link #UUID}.
+     * 
+     * @return (UUID) uuid associated to this Actor.
+     */
+    public UUID getUUID() {
+        return UUID;
+    }
+
+    /**
+     * Setter of {@link #UUID}.
+     * 
+     * @param UUID (UUID) uuid to associate to this Actor.
+     */
+    public void setUUID(UUID UUID) {
+        this.UUID = UUID;
     }
 
     /**
@@ -53,13 +71,12 @@ public abstract class Actor {
      *         already put.
      */
     public ByteBuffer getState() {
-        ByteBuffer buffer = ByteBuffer.allocate(Network.BUFFER_SIZE);
+        ByteBuffer buffer = Utilities.newBuffer();
         // On met l'UUID dans le buffer sous forme de 2 long
-        buffer.putLong(UUID.getMostSignificantBits());
-        buffer.putLong(UUID.getLeastSignificantBits());
+        Utilities.putUUID(buffer, UUID);
         // On met la class de l'objet (qui extends Actor)
         String srcClass = this.getClass().getSimpleName();
-        Network.putString(buffer, srcClass);
+        Utilities.putStringGMS2(buffer, srcClass);
         // On met les coordonnées
         buffer.putInt(positionX);
         buffer.putInt(positionY);
