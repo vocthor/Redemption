@@ -28,7 +28,7 @@ public class EventDecoder {
      * @param buffer (ByteBuffer) data to handle.
      * @return (GameEvent) event newly created corresponding to the data.
      */
-    public static GameEvent handle(ByteBuffer buffer) {
+    public static GameEvent decode(ByteBuffer buffer) {
         switch (type = buffer.get()) {
             case EventType.PLAYER_MOVE:
                 return handlePlayerMove(buffer);

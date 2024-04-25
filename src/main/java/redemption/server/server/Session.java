@@ -91,7 +91,7 @@ public class Session {
      */
     public GameEvent getEvent(ByteBuffer buffer) {
         // On génère l'event selon le paquet
-        GameEvent event = EventDecoder.handle(buffer);
+        GameEvent event = EventDecoder.decode(buffer);
         event.setSession(this);
         if (inGame)
             controller.handleEvent(event);
