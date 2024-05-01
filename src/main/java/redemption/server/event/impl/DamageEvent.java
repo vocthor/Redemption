@@ -15,8 +15,8 @@ public class DamageEvent extends GameEvent {
     private UUID targetUUID;
     private int dmg;
 
-    public DamageEvent(int t) {
-        super(t);
+    public DamageEvent() {
+        super();
         // TODO Auto-generated constructor stub
     }
 

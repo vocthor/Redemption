@@ -1,10 +1,11 @@
 package redemption.server.server;
 
 import java.nio.ByteBuffer;
-import java.util.Optional;
 
 import redemption.server.event.EventDecoder;
 import redemption.server.event.GameEvent;
+import redemption.server.event.impl.NetworkEvent;
+import redemption.server.event.Event;
 import redemption.server.game.GameController;
 import redemption.server.game.actors.Player;
 import redemption.server.utilities.Utilities;
@@ -89,18 +90,23 @@ public class Session {
      * @param buffer (ByteBuffer) data to process.
      * @return (GameEvent) the newly created event.
      */
-    public GameEvent getEvent(ByteBuffer buffer) {
+    public void getEvent(ByteBuffer buffer) {
         // On génère l'event selon le paquet
-        GameEvent event = EventDecoder.decode(buffer);
+        Event event = EventDecoder.decode(buffer);
         event.setSession(this);
-        if (inGame)
-            controller.handleEvent(event);
-        else
-            Network.handleEvent(event);
-        return event;
+        if (event instanceof GameEvent)
+            controller.receiveEvent((GameEvent)event);
+        else if (event instanceof NetworkEvent)
+            Network.handleEvent((NetworkEvent)event);
+        else {
+            System.out.println("PAQUET PAS HANDLED");
+            System.out.println("DEAD (cf Session) T_T");
+            System.exit(42);
+        }
     }
 
     /**
+     * Pue globalement le kk car laisse trop de pouvoir côté client + tout aussi chiant à implémenter et/ou pas plus rapide 
      * @see{https://github.com/f0rbit/gm-server/blob/main/src/main/java/dev/forbit/server/utilities/Utilities.java}
      * @return
      */

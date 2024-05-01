@@ -2,7 +2,7 @@ package redemption.server.event;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 import redemption.server.game.Actor;
 
@@ -34,7 +34,7 @@ public class EventEncoder {
      add* @return (int) the number of bytes added to the buffer.
      * @see {@link Actor#getState()}.
      */
-    public static int addState(ByteBuffer buffer, List<? extends Actor> actors) {
+    public static int addState(ByteBuffer buffer, Collection<? extends Actor> actors) {
         int pos = buffer.position();
         for (Actor a : actors) {
             ByteBuffer stateA = a.getState();

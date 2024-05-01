@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import redemption.server.event.GameEvent;
+import redemption.server.event.impl.NetworkEvent;
 
 /**
  * General purpose class to process Network events (connect, diconnect, etc) and
@@ -29,7 +30,7 @@ public class Network {
      * @see {@link Session#getEvent(ByteBuffer)}.
      * @see {@link EventDecoder}.
      */
-    public static void handleEvent(GameEvent event) {
+    public static void handleEvent(NetworkEvent event) {
         // TODO
     }
 }

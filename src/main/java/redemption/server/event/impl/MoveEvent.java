@@ -11,8 +11,8 @@ public class MoveEvent extends GameEvent {
     int deltaX;
     int deltaY;
 
-    public MoveEvent(int t) {
-        super(t);
+    public MoveEvent() {
+        super();
     }
 
     @Override

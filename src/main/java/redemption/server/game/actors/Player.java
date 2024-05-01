@@ -3,7 +3,6 @@ package redemption.server.game.actors;
 import java.nio.ByteBuffer;
 
 import redemption.server.game.Actor;
-import redemption.server.server.Network;
 import redemption.server.server.Session;
 
 /**

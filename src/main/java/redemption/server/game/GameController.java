@@ -2,7 +2,10 @@ package redemption.server.game;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,8 @@ public class GameController {
      * {@link GameServer} from where this controller is.
      */
     private GameServer server;
+
+    private Queue<GameEvent> eventQueue;
 
     public GameController(GameServer s) {
         sessions = new ArrayList<>();
@@ -56,8 +61,15 @@ public class GameController {
      * @see {@link GameEvent#processEvent(GameController)}
      * @param event (GameEvent) event to process.
      */
-    public void handleEvent(GameEvent event) {
-        List<? extends Actor> modifiedActors = event.processEvent(this);
+    public void receiveEvent(GameEvent event) {
+        eventQueue.add(event);
+    }
+
+    public void processRound() {
+        Set<Actor> modifiedActors = new HashSet<>();
+        while (!eventQueue.isEmpty()) {
+            modifiedActors.addAll(eventQueue.poll().processEvent(this));
+        }
         // MegaPacket containing all the states
         ByteBuffer buffer = Utilities.newBuffer();
         EventEncoder.addState(buffer, modifiedActors);
