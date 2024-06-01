@@ -20,7 +20,7 @@ import redemption.server.utilities.Utilities;
  * Controller of the game 'Redemption'. Each controller should be specific to
  * the game / logic you want.
  */
-public class GameController {
+public class GameController extends Thread {
     /**
      * List of {@link Session} connected to this controller.
      */
@@ -32,27 +32,28 @@ public class GameController {
 
     private Queue<GameEvent> eventQueue;
 
+    private final long ROUND_DURATION = 15000;
+
     public GameController(GameServer s) {
         sessions = new ArrayList<>();
         server = s;
     }
 
     /**
-     * Adds a {@link Session} to {@link GameController#sessions}.
-     * 
-     * @param s (Session) session to add.
+     * Main loop of the game
      */
-    public void addSession(Session s) {
-        sessions.add(s);
-    }
-
-    /**
-     * Removes a {@link Session} from {@link GameController#sessions}.
-     * 
-     * @param s (Session) session to remove.
-     */
-    public void removeSession(Session s) {
-        sessions.remove(s);
+    @Override
+    public void run() {
+        eventQueue.clear();
+        while (true) {
+            processRound();
+            try {
+                wait(ROUND_DURATION);
+            } catch (InterruptedException e) {
+                System.err.println("The game loop has been interrupted !");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -61,11 +62,11 @@ public class GameController {
      * @see {@link GameEvent#processEvent(GameController)}
      * @param event (GameEvent) event to process.
      */
-    public void receiveEvent(GameEvent event) {
+    public synchronized void receiveEvent(GameEvent event) {
         eventQueue.add(event);
     }
 
-    public void processRound() {
+    public synchronized void processRound() {
         Set<Actor> modifiedActors = new HashSet<>();
         while (!eventQueue.isEmpty()) {
             modifiedActors.addAll(eventQueue.poll().processEvent(this));
@@ -92,6 +93,24 @@ public class GameController {
                 return p;
         }
         return null;
+    }
+
+    /**
+     * Adds a {@link Session} to {@link GameController#sessions}.
+     * 
+     * @param s (Session) session to add.
+     */
+    public void addSession(Session s) {
+        sessions.add(s);
+    }
+
+    /**
+     * Removes a {@link Session} from {@link GameController#sessions}.
+     * 
+     * @param s (Session) session to remove.
+     */
+    public void removeSession(Session s) {
+        sessions.remove(s);
     }
 
     public static void main(String[] args) throws Exception {

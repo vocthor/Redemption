@@ -33,13 +33,14 @@ public class GameServer {
     /**
      * TODO
      */
-    private GameController controller;
+    private GameController gameController;
 
     public GameServer(int p) {
         clients = new HashSet<>();
-        controller = new GameController(this);
-        running = false;
+        gameController = new GameController(this);
+        gameController.setDaemon(true);
 
+        running = false;
         try {
             socket = new ServerSocket(p);
             port = p;
@@ -59,13 +60,16 @@ public class GameServer {
      */
     public void run() {
         try {
+            // TODO : move this to a packet reception sent by a player
+            gameController.start();
+
             while (running) {
                 // Tickrate du server ?
                 Thread.sleep(1);
                 // On accepte les connexions entrantes
                 Socket s = socket.accept();
                 System.out.println("A client has connected ! From : " + s.getInetAddress());
-                // On créer un Thread par client pour les gérer
+                // On crée un Thread par client pour les gérer
                 GameClient c = new GameClient(this, s);
                 c.setDaemon(true);
                 clients.add(c);
@@ -86,6 +90,7 @@ public class GameServer {
 
     /**
      * Removes a {@link GameClient} from {@link GameServer#clients}
+     * 
      * @param c (GameClient) client to remove.
      */
     public void removeClient(GameClient c) {
@@ -93,16 +98,16 @@ public class GameServer {
     }
 
     /**
-     * {@link GameServer#controller}
+     * {@link GameServer#gameController}
+     * 
      * @return TODO
      */
-    public GameController getController() {
-        return controller;
+    public GameController getGameController() {
+        return gameController;
     }
 
     /**
      * Displays the information about this server : IPv4 address and port.
-     * 
      */
     public void displayInfo() {
         System.out.println("Adresse : " + socket.getInetAddress() + " Port : " + port);

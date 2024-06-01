@@ -53,7 +53,7 @@ public class GameClient extends Thread {
         session = new Session(this);
         // TEMPORAIRE
         try {
-            session.connectToGame(server.getController());
+            session.connectToGame(server.getGameController());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
