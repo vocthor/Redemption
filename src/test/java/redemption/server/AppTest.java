@@ -67,10 +67,13 @@ public class AppTest {
 
     public static void main(String[] args) throws Exception {
         TestClient c1 = new TestClient("0.0.0.0", 5555);
-        c1.send(new byte [] {0x01});
-        Thread.sleep(1000);
         c1.send(new byte [] {0x02});
         Thread.sleep(1000);
+        TestClient c2 = new TestClient("0.0.0.0", 5555);
+        c2.send(new byte [] {0x02});
+        c1.send(new byte [] {0x01});
+        Thread.sleep(1000);
         c1.send(new byte [] {0x61, 0x15});
+        c2.send(new byte [] {0x61, 0x15});
     }
 }

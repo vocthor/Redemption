@@ -2,6 +2,14 @@
 
 # TODO
 
-Dans GameEvent faut dégager l'attribut int type car le type d'un event sera defini par la classe. En plus ca fout la merde dans EventDecoder pcq attribut statique (=> si on recoit plein d'event ca va override)
+## Loop
+- Support multiple gamecontroller by gameserver (ou PAS ? => BEAUCOUP plus simple) 
+- Si une game par serveur (?) -> fusionner StartGameEvent et ConnectGameEvent en 1, qui start à la volée si besoin
 
-Support multiple gamecontroller by gameserver 
+## Services
+- Faire un service à injecter auto pour éviter de se trimballer gamecontroller partout
+- => Spring Boot ?
+
+## Clients
+- RETRAVAILLER EventEncoder + quoi qu'on renvoie à GMS2
+- Retour vers client quand event added to GameController queue
