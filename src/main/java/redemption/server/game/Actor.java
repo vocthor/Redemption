@@ -14,54 +14,54 @@ public abstract class Actor {
     /**
      * {@link GameController} from where this Actor comes from.
      */
-    protected GameController controller;
+    protected GameController _controller;
 
     /**
      * Each Actor has an unique UUID, used to identify them.
      */
-    protected UUID UUID;
+    protected UUID _UUID;
 
-    protected int positionX;
-    protected int positionY;
+    protected int _positionX;
+    protected int _positionY;
 
     public Actor() {
-        UUID = java.util.UUID.randomUUID();
+        _UUID = java.util.UUID.randomUUID();
     }
 
     /**
-     * Getter of {@link #controller}.
+     * Getter of {@link #_controller}.
      * 
      * @return (GameController) controller associated to this Actor.
      */
-    public GameController getController() {
-        return controller;
+    public GameController get_controller() {
+        return _controller;
     }
 
     /**
-     * Setter of {@link #controller}.
+     * Setter of {@link #_controller}.
      * 
      * @param controller (GameController) controller associated to this Actor.
      */
-    public void setController(GameController controller) {
-        this.controller = controller;
+    public void set_controller(GameController controller) {
+        this._controller = controller;
     }
 
     /**
-     * Getter of {@link #UUID}.
+     * Getter of {@link #_UUID}.
      * 
      * @return (UUID) uuid associated to this Actor.
      */
-    public UUID getUUID() {
-        return UUID;
+    public UUID get_UUID() {
+        return _UUID;
     }
 
     /**
-     * Setter of {@link #UUID}.
+     * Setter of {@link #_UUID}.
      * 
      * @param UUID (UUID) uuid to associate to this Actor.
      */
-    public void setUUID(UUID UUID) {
-        this.UUID = UUID;
+    public void set_UUID(UUID UUID) {
+        this._UUID = UUID;
     }
 
     /**
@@ -73,13 +73,13 @@ public abstract class Actor {
     public ByteBuffer getState() {
         ByteBuffer buffer = Utilities.newBuffer();
         // On met l'UUID dans le buffer sous forme de 2 long
-        Utilities.putUUID(buffer, UUID);
+        Utilities.putUUID(buffer, _UUID);
         // On met la class de l'objet (qui extends Actor)
         String srcClass = this.getClass().getSimpleName();
         Utilities.putStringGMS2(buffer, srcClass);
         // On met les coordonnées
-        buffer.putInt(positionX);
-        buffer.putInt(positionY);
+        buffer.putInt(_positionX);
+        buffer.putInt(_positionY);
         return buffer;
     }
 }

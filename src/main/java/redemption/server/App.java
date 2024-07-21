@@ -7,7 +7,7 @@ import redemption.server.server.GameServer;
  */
 public class App {
     public static void main(String[] args) {
-        GameServer s1 = new GameServer(5555);
+        GameServer s1 = GameServer.getInstance();
         s1.run();
     }
 }

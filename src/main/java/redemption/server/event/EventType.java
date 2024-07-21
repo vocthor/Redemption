@@ -7,6 +7,11 @@ package redemption.server.event;
  * @see {@link EventDecoder}.
  */
 public class EventType {
+    // NETWORK
+    public final static byte START_GAME = 0x01;
+    public final static byte CONNECT_GAME = 0x02;
+
+    // GAME
     public final static byte PLAYER_SPELL1 = 0x62;
     public final static byte PLAYER_SPELL2 = 0x63;
     public final static byte PLAYER_MOVE = 0x04;

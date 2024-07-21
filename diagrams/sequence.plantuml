@@ -1,0 +1,57 @@
+@startuml
+
+participant ...
+participant GameServer
+collections GameClient
+participant Session
+participant EventDecoder
+participant Network
+participant NetworkEvent
+participant GameController
+queue _eventQueue
+participant GameEvent
+participant EventEncoder
+
+
+activate GameServer
+... --> GameServer
+GameServer -> GameClient : start()
+
+activate GameClient
+... --> GameClient : byte[]
+GameClient -> Session : getEvent()
+
+Session -> EventDecoder : decode()
+
+EventDecoder --> Session : Event
+alt NetworkEvent
+    Session -> Network : receiveEvent()
+    Network -> NetworkEvent : processEvent()
+    alt START_GAME
+        NetworkEvent -> GameController : start()
+        activate GameController
+    else CONNECT_GAME
+        NetworkEvent -> Session : connectToGame()
+    end
+else GameEvent
+    Session -> GameController : receiveEvent()
+    GameController -> _eventQueue : add()
+    note over GameController : processRound() runs every X sec
+    group processRound()
+        GameController -> _eventQueue : poll()
+        _eventQueue --> GameController : GameEvent
+        GameController -> GameEvent : process()
+        GameEvent --> GameController : List<Actors>
+        loop foreach Actor
+            GameController -> EventEncoder : addState()
+            loop foreach Session
+                GameController -> Session : sendToClient()
+                Session -> GameClient : send()
+            end
+        end
+
+    end
+end
+
+
+@enduml

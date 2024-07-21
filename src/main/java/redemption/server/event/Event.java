@@ -9,30 +9,30 @@ public abstract class Event {
     /**
      * {@link Session} associated to this event.
      */
-    protected Session session;
+    protected Session _session;
 
     public Event() {
     }
 
     /**
-     * Getter of {@link GameEvent#session}.
+     * Getter of {@link GameEvent#_session}.
      * 
      * @return (Session) session associated to this event.
      */
-    public Session getSession() {
-        return session;
+    public Session get_session() {
+        return _session;
     }
 
     /**
-     * Setter of {@link GameEvent#session}.
+     * Setter of {@link GameEvent#_session}.
      * 
      * @param s (Session) session associated to this event.
      */
-    public void setSession(Session s) {
-        session = s;
+    public void set_session(Session s) {
+        _session = s;
     }
 
     public String toString() {
-        return "Event : " + this.getClass().getName();
+        return "Event " + this.getClass().getName();
     }
 }

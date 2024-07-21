@@ -6,51 +6,68 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.extern.log4j.Log4j2;
 import redemption.server.game.GameController;
 
 /**
  * General Server class. Accepts incoming connections, and creates a
  * {@link GameClient} thread for each connection.
  */
+@Log4j2
 public class GameServer {
+
+    private static volatile GameServer instance;
+
+    public static GameServer getInstance() {
+        GameServer res = instance;
+        if (res != null)
+            return res;
+        synchronized (GameServer.class) {
+            if (instance == null)
+                instance = new GameServer();
+            return instance;
+        }
+    }
+
     /**
      * Port where the server is running
      */
-    private int port;
+    private int _port;
     /**
      * Is the server running ?
      */
-    private boolean running;
+    private boolean _running;
     /**
      * Socket associated
      */
-    private ServerSocket socket;
+    private ServerSocket _socket;
     /**
      * List of clients connected to the server. A {@link GameClient} thread is
      * associated to each client.
      */
-    private Set<GameClient> clients;
+    private Set<GameClient> _clients;
     /**
      * TODO
      */
-    private GameController gameController;
+    private GameController _gameController;
 
-    public GameServer(int p) {
-        clients = new HashSet<>();
-        gameController = new GameController(this);
-        gameController.setDaemon(true);
+    private GameServer() {
+        _clients = new HashSet<>();
+        _gameController = new GameController(this);
+        _gameController.setDaemon(true);
 
-        running = false;
+        _running = false;
         try {
-            socket = new ServerSocket(p);
-            port = p;
-            running = true;
+            int p = Integer.valueOf(System.getenv("SERVER_PORT"));
+            _socket = new ServerSocket(p);
+            _port = p;
+            _running = true;
             // Affichage caracteristiques du serveur
-            displayInfo();
+            log.info("Server started on port " + _port);
         } catch (IOException e) {
-            System.err.println("IOException error during creating the socket !");
-            socket = null;
-            running = false;
+            log.error("IOException error during creating the socket !", e);
+            _socket = null;
+            _running = false;
         }
     }
 
@@ -60,30 +77,28 @@ public class GameServer {
      */
     public void run() {
         try {
-            // TODO : move this to a packet reception sent by a player
-            gameController.start();
-
-            while (running) {
+            while (_running) {
                 // Tickrate du server ?
                 Thread.sleep(1);
                 // On accepte les connexions entrantes
-                Socket s = socket.accept();
-                System.out.println("A client has connected ! From : " + s.getInetAddress());
+                Socket s = _socket.accept();
+                log.info("A client has connected from : " + s.getInetAddress());
                 // On crée un Thread par client pour les gérer
-                GameClient c = new GameClient(this, s);
+                GameClient c = new GameClient(s);
                 c.setDaemon(true);
-                clients.add(c);
+                _clients.add(c);
                 c.start();
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error("The Server encountered an error !", e);
         } finally {
             // Si pb on ferme le ServerSocket
-            running = false;
+            log.info("Stopping server.");
+            _running = false;
             try {
-                socket.close();
+                _socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("The server encountered an error while closing !",e);
             }
         }
     }
@@ -94,22 +109,15 @@ public class GameServer {
      * @param c (GameClient) client to remove.
      */
     public void removeClient(GameClient c) {
-        clients.remove(c);
+        _clients.remove(c);
     }
 
     /**
-     * {@link GameServer#gameController}
+     * {@link GameServer#_gameController}
      * 
      * @return TODO
      */
     public GameController getGameController() {
-        return gameController;
-    }
-
-    /**
-     * Displays the information about this server : IPv4 address and port.
-     */
-    public void displayInfo() {
-        System.out.println("Adresse : " + socket.getInetAddress() + " Port : " + port);
+        return _gameController;
     }
 }

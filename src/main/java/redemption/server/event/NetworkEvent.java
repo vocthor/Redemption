@@ -1,8 +1,6 @@
-package redemption.server.event.impl;
+package redemption.server.event;
 
-import redemption.server.event.Event;
-
-public class NetworkEvent extends Event {
+public abstract class NetworkEvent extends Event {
 
     public NetworkEvent() {
         super();
@@ -12,4 +10,6 @@ public class NetworkEvent extends Event {
     public String toString() {
         return "Network Event";
     }
+
+    public abstract void processEvent();
 }

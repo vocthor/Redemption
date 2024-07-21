@@ -3,13 +3,15 @@ package redemption.server.server;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import lombok.extern.log4j.Log4j2;
 import redemption.server.event.GameEvent;
-import redemption.server.event.impl.NetworkEvent;
+import redemption.server.event.NetworkEvent;
 
 /**
  * General purpose class to process Network events (connect, diconnect, etc) and
  * useful functions.
  */
+@Log4j2
 public class Network {
     /**
      * Size of received and sent buffers.
@@ -30,7 +32,9 @@ public class Network {
      * @see {@link Session#getEvent(ByteBuffer)}.
      * @see {@link EventDecoder}.
      */
-    public static void handleEvent(NetworkEvent event) {
+    public static void receiveEvent(NetworkEvent event) {
+        log.info("New event received in Network. Processing it.");
+        event.processEvent();
         // TODO
     }
 }

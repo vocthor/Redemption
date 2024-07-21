@@ -11,44 +11,44 @@ import redemption.server.server.Session;
  * @see {@link Actor}.
  */
 public class Player extends Actor {
-    private int vie;
-    private int mana;
-    private Session session;
+    private int _health;
+    private int _mana;
+    private Session _session;
 
     public Player(Session s) {
         super();
-        session = s;
-        vie = 100;
-        mana = 100;
+        _session = s;
+        _health = 100;
+        _mana = 100;
     }
 
-    public Session getSession() {
-        return session;
+    public Session get_session() {
+        return _session;
     }
 
-    public int getVie() {
-        return vie;
+    public int get_health() {
+        return _health;
     }
 
-    public int getMana() {
-        return mana;
+    public int get_mana() {
+        return _mana;
     }
 
     public void takeDamage(int dmg) {
-        vie -= dmg;
+        _health -= dmg;
     }
 
     public void move(int deltaX, int deltaY) {
-        positionX += deltaX;
-        positionY += deltaY;
-        System.out.println("Position de " + UUID + " X : " + positionX + " & Y : " + positionY);
+        _positionX += deltaX;
+        _positionY += deltaY;
+        System.out.println("Position de " + _UUID + " X : " + _positionX + " & Y : " + _positionY);
     }
 
     @Override
     public ByteBuffer getState() {
         ByteBuffer buffer = super.getState();
-        buffer.putInt(vie);
-        buffer.putInt(mana);
+        buffer.putInt(_health);
+        buffer.putInt(_mana);
         return buffer;
     }
 }

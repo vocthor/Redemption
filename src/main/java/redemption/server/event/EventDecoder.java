@@ -2,12 +2,15 @@ package redemption.server.event;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import redemption.server.event.impl.DamageEvent;
-import redemption.server.event.impl.MoveEvent;
+import lombok.extern.log4j.Log4j2;
+import redemption.server.event.gameevent.DamageEvent;
+import redemption.server.event.gameevent.MoveEvent;
+import redemption.server.server.GameServer;
 import redemption.server.utilities.Utilities;
 
 /**
@@ -15,10 +18,16 @@ import redemption.server.utilities.Utilities;
  * 
  * @see {@link EventType}.
  */
+@Log4j2
 public class EventDecoder {
 
-    private static final Map<Byte, Function<ByteBuffer, Event>> eventTypeMap = new HashMap<>() {
+    private static final Map<Byte, Function<ByteBuffer, Event>> EVENT_TYPE_MAP = new HashMap<>() {
         {
+            // NETWORK
+            put(EventType.START_GAME, EventDecoder::handleStartGame);
+            put(EventType.CONNECT_GAME, EventDecoder::handleConnectGame);
+
+            // GAME
             put(EventType.PLAYER_MOVE, EventDecoder::handlePlayerMove);
             put(EventType.ATTACK, EventDecoder::handleAttack);
             put(EventType.PLAYER_SPELL1, EventDecoder::handleSpell1);
@@ -37,7 +46,20 @@ public class EventDecoder {
      * @return (GameEvent) event newly created corresponding to the data.
      */
     public static Event decode(ByteBuffer buffer) {
-        return eventTypeMap.getOrDefault(buffer.get(), EventDecoder::handlePlayerMove).apply(buffer);
+        log.info("Decoding Event from data.");
+        return EVENT_TYPE_MAP.getOrDefault(buffer.get(), EventDecoder::unrecognizedEvent).apply(buffer);
+    }
+
+    /**
+     * Dummy function for when a buffer could not be interpreted
+     * 
+     * @param buffer (ByteBuffer) buffer to handle
+     * @return (Event) null
+     */
+    private static Event unrecognizedEvent(ByteBuffer buffer) {
+        System.out.println("This buffer cannot be parsed correctly !");
+        System.out.println(Arrays.toString(buffer.array()));
+        return null;
     }
 
     private static GameEvent handlePlayerMove(ByteBuffer buffer) {
@@ -49,8 +71,8 @@ public class EventDecoder {
 
     private static GameEvent handleAttack(ByteBuffer buffer) {
         DamageEvent damageEvent = new DamageEvent();
-        damageEvent.setTargetUUID(Utilities.getUUID(buffer));
-        damageEvent.setDmg(buffer.getInt());
+        damageEvent.set_targetUUID(Utilities.getUUID(buffer));
+        damageEvent.set_dmg(buffer.getInt());
         System.out.println("Attack");
         return damageEvent;
     }
@@ -66,26 +88,53 @@ public class EventDecoder {
 
     private static GameEvent handleZ(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.setDeltaY(-10);
+        moveEvent.set_deltaY(-10);
         return moveEvent;
     }
 
     private static GameEvent handleQ(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.setDeltaX(-10);
+        moveEvent.set_deltaX(-10);
         return moveEvent;
     }
 
     private static GameEvent handleS(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.setDeltaY(10);
+        moveEvent.set_deltaY(10);
         return moveEvent;
     }
 
     private static GameEvent handleD(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.setDeltaX(10);
+        moveEvent.set_deltaX(10);
         return moveEvent;
     }
 
+    // TODO : créer classe a part : StartGameEvent
+    private static NetworkEvent handleStartGame(ByteBuffer buffer) {
+        return new NetworkEvent() {
+            @Override
+            public void processEvent() {
+                log.info("Processing StartGameEvent.");
+                GameServer server = GameServer.getInstance();
+                server.getGameController().start();
+            }
+        };
+    }
+
+    // TODO : créer classe a part : ConnectGameEvent
+    private static NetworkEvent handleConnectGame(ByteBuffer buffer) {
+        return new NetworkEvent() {
+            @Override
+            public void processEvent() {
+                log.info("Processing ConnectGameEvent.");
+                GameServer server = GameServer.getInstance();
+                try {
+                    _session.connectToGame(server.getGameController());
+                } catch (Exception e) {
+                    log.error("Could not connect Session to the GameController.");
+                }
+            }
+        };
+    }
 }
