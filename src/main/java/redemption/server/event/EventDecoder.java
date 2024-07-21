@@ -10,6 +10,8 @@ import java.util.function.Function;
 import lombok.extern.log4j.Log4j2;
 import redemption.server.event.gameevent.DamageEvent;
 import redemption.server.event.gameevent.MoveEvent;
+import redemption.server.event.networkevent.ConnectGameEvent;
+import redemption.server.event.networkevent.StartGameEvent;
 import redemption.server.server.GameServer;
 import redemption.server.utilities.Utilities;
 
@@ -110,31 +112,11 @@ public class EventDecoder {
         return moveEvent;
     }
 
-    // TODO : créer classe a part : StartGameEvent
     private static NetworkEvent handleStartGame(ByteBuffer buffer) {
-        return new NetworkEvent() {
-            @Override
-            public void processEvent() {
-                log.info("Processing StartGameEvent.");
-                GameServer server = GameServer.getInstance();
-                server.getGameController().start();
-            }
-        };
+        return new StartGameEvent();
     }
 
-    // TODO : créer classe a part : ConnectGameEvent
     private static NetworkEvent handleConnectGame(ByteBuffer buffer) {
-        return new NetworkEvent() {
-            @Override
-            public void processEvent() {
-                log.info("Processing ConnectGameEvent.");
-                GameServer server = GameServer.getInstance();
-                try {
-                    _session.connectToGame(server.getGameController());
-                } catch (Exception e) {
-                    log.error("Could not connect Session to the GameController.");
-                }
-            }
-        };
+        return new ConnectGameEvent();
     }
 }
