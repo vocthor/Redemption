@@ -4,7 +4,7 @@
 
 ## Loop
 - Support multiple gamecontroller by gameserver (ou PAS ? => BEAUCOUP plus simple) 
-- Si une game par serveur (?) -> fusionner StartGameEvent et ConnectGameEvent en 1, qui start à la volée si besoin
+- Si une game par serveur (?) -> fusionner StartGameEvent et ConnectGameEvent en 1, qui start à la volée si besoin -> OU PAS pour séparer connexion / lancement de la partie
 
 ## Services
 - Faire un service à injecter auto pour éviter de se trimballer gamecontroller partout

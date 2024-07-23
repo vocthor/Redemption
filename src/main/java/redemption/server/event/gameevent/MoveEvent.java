@@ -10,8 +10,8 @@ import redemption.server.game.GameController;
 
 @Log4j2
 public class MoveEvent extends GameEvent {
-    int _deltaX;
-    int _deltaY;
+    private int _deltaX;
+    private int _deltaY;
 
     public MoveEvent() {
         super();
@@ -25,11 +25,11 @@ public class MoveEvent extends GameEvent {
         return Arrays.asList(getPlayer());
     }
 
-    public void set_deltaX(int deltaX) {
+    public void setDeltaX(int deltaX) {
         this._deltaX = deltaX;
     }
 
-    public void set_deltaY(int deltaY) {
+    public void setDeltaY(int deltaY) {
         this._deltaY = deltaY;
     }
 

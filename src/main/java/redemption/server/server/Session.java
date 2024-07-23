@@ -105,7 +105,7 @@ public class Session {
             log.warn("Event is null.");
             return;
         }
-        event.set_session(this);
+        event.setSession(this);
         if (event instanceof GameEvent)
             _controller.receiveEvent((GameEvent) event);
         else if (event instanceof NetworkEvent)
@@ -150,7 +150,7 @@ public class Session {
      * 
      * @return (Player) player associated to this Session.
      */
-    public Player get_player() {
+    public Player getPlayer() {
         return _player;
     }
 
@@ -159,7 +159,7 @@ public class Session {
      * 
      * @return (GameClient) client associated to this Session.
      */
-    public GameClient get_client() {
+    public GameClient getClient() {
         return _client;
     }
 }

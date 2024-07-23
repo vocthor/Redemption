@@ -12,7 +12,6 @@ import redemption.server.event.gameevent.DamageEvent;
 import redemption.server.event.gameevent.MoveEvent;
 import redemption.server.event.networkevent.ConnectGameEvent;
 import redemption.server.event.networkevent.StartGameEvent;
-import redemption.server.server.GameServer;
 import redemption.server.utilities.Utilities;
 
 /**
@@ -73,8 +72,8 @@ public class EventDecoder {
 
     private static GameEvent handleAttack(ByteBuffer buffer) {
         DamageEvent damageEvent = new DamageEvent();
-        damageEvent.set_targetUUID(Utilities.getUUID(buffer));
-        damageEvent.set_dmg(buffer.getInt());
+        damageEvent.setTargetUUID(Utilities.getUUID(buffer));
+        damageEvent.setDmg(buffer.getInt());
         System.out.println("Attack");
         return damageEvent;
     }
@@ -90,25 +89,25 @@ public class EventDecoder {
 
     private static GameEvent handleZ(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.set_deltaY(-10);
+        moveEvent.setDeltaY(-10);
         return moveEvent;
     }
 
     private static GameEvent handleQ(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.set_deltaX(-10);
+        moveEvent.setDeltaX(-10);
         return moveEvent;
     }
 
     private static GameEvent handleS(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.set_deltaY(10);
+        moveEvent.setDeltaY(10);
         return moveEvent;
     }
 
     private static GameEvent handleD(ByteBuffer buffer) {
         MoveEvent moveEvent = new MoveEvent();
-        moveEvent.set_deltaX(10);
+        moveEvent.setDeltaX(10);
         return moveEvent;
     }
 

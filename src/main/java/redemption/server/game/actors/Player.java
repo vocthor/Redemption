@@ -22,15 +22,15 @@ public class Player extends Actor {
         _mana = 100;
     }
 
-    public Session get_session() {
+    public Session getSession() {
         return _session;
     }
 
-    public int get_health() {
+    public int getHealth() {
         return _health;
     }
 
-    public int get_mana() {
+    public int getMana() {
         return _mana;
     }
 

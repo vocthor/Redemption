@@ -19,7 +19,7 @@ public abstract class Event {
      * 
      * @return (Session) session associated to this event.
      */
-    public Session get_session() {
+    public Session getSession() {
         return _session;
     }
 
@@ -28,7 +28,7 @@ public abstract class Event {
      * 
      * @param s (Session) session associated to this event.
      */
-    public void set_session(Session s) {
+    public void setSession(Session s) {
         _session = s;
     }
 

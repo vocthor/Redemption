@@ -31,16 +31,16 @@ public class DamageEvent extends GameEvent {
             return new ArrayList<Player>();
         }
         targetPlayer.takeDamage(_dmg);
-        System.out.println(targetPlayer.get_health());
+        System.out.println(targetPlayer.getHealth());
         log.info("DamageEvent processed.");
         return Arrays.asList(getPlayer(), targetPlayer);
     }
 
-    public void set_dmg(int dmg) {
+    public void setDmg(int dmg) {
         this._dmg = dmg;
     }
 
-    public void set_targetUUID(UUID targetUUID) {
+    public void setTargetUUID(UUID targetUUID) {
         this._targetUUID = targetUUID;
     }
 

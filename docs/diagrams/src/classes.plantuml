@@ -1,0 +1,199 @@
+@startuml
+
+class App
+package event{
+    package gameevent{
+        class DamageEvent extends event.GameEvent {
+            - UUID _targetUUID
+            - int _dmg
+            + DamageEvent()
+            + List<? extends Actor> processEvent(GameController)
+            + void setDmg(int)
+            + void setTargetUUID(UUID)
+        }
+
+        class MoveEvent extends event.GameEvent {
+            - int _deltaX
+            - int _deltaY
+            + MoveEvent()
+            + List<? extends Actor> processEvent(GameController)
+            + void setDeltaX(int)
+            + void setDeltaY(int)
+        }
+    }
+    package networkevent{
+        class ConnectGameEvent extends event.NetworkEvent {
+            + void processEvent()
+        }
+        class StartGameEvent extends event.NetworkEvent {
+            + void processEvent()
+        }
+    }
+
+    abstract Event {
+        # Session _session
+        + Event()
+        + Session getSession()
+        + void setSession(Session)
+        + String toString()
+    }
+
+    class EventDecoder {
+        - {static} Map<Byte, Function<ByteBuffer, Event>> EVENT_TYPE_MAP
+        + {static} Event decode (ByteBuffer)
+        - {static} Event unrecognizedEvent(ByteBuffer)
+        - {static} GameEvent handle...(ByteBuffer)
+        - {static} NetworkEvent handleStartGame(ByteBuffer)
+        - {static} NetworkEvent handleConnectGame(ByteBuffer)
+    }
+
+    class EventEncoder {
+        + {static} int addState(ByteBuffer, Actor)
+        + {static} int addState(ByteBuffer, Collection<? extends Actor>)
+        + {static} void addSpecialEvent(ByteBuffer)
+    }
+
+    class EventType {
+        + {static} byte START_GAME
+        + {static} byte CONNECT_GAME
+        + {static} byte ...
+    }
+
+    abstract GameEvent extends event.Event {
+        + GameEvent()
+        + Player getPlayer()
+        + {abstract} List<? extends Actor> processEvent(GameController)
+        + String toString()
+    }
+
+    abstract NetworkEvent extends event.Event {
+        + NetworkEvent()
+        + String toString()
+        + {abstract} void processEvent()
+    }
+}
+
+package game{
+    package actors{
+        class Player extends game.Actor{
+            - int _health
+            - int _mana
+            - Session _session
+            + Player(Session)
+            + Session getSession()
+            + int getHealth()
+            + int getMana()
+            + void takeDamage(int)
+            + void move(int, int)
+            + ByteBuffer getState()
+        }
+    }
+
+    abstract Actor {
+        # GameController _controller
+        # UUID _uuid
+        # int _positionX
+        # int _positionY
+        + Actor()
+        + GameController getGameController()
+        + void setGameController(GameController)
+        + UUID getUUID()
+        + void setUUID(UUID)
+        + ByteBuffer getState()
+    }
+
+    class GameController <<Thread>> {
+        - List<Session> _sessions
+        - GameServer _server
+        - Queue<GameEvent> _eventQueue
+        - long ROUND_DURATION
+        + GameController(GameServer)
+        + void run()
+        + synchronized void receivedEvent(GameEvent)
+        + synchronized void processRound()
+        + Player findPlayerByUUID(UUID)
+        + void addSession(Session)
+        + void removeSession(Session)
+    }
+}
+
+package server{
+    class GameClient <<Thread>> {
+        - boolean _connected
+        - Socket _socket
+        - GameServer _server
+        - DataInputStream _dataIn
+        - DataOutputStream _dataOut
+        - Session _session
+        + GameClient(Socket)
+        + void run()
+        + void send(byte[])
+    }
+
+    class GameServer <<Singleton>> {
+        - {static} GameServer instance
+        + {static} GameServer getInstance()
+        - int _port
+        - boolean _running
+        - ServerSocket _socket
+        - Set<GameClient> _clients
+        - GameController _gameController
+        - GameServer()
+        + void run()
+        + void removeClient(GameClient)
+        + GameController getGameController()
+    }
+
+    class Network {
+        + {static} int BUFFER_SIZE
+        + {static} ByteOrder ENDIAN
+        + {static} recieveEvent(NetworkEvent)
+    }
+
+    class Session {
+        - GameClient _client
+        - Player _player
+        - boolean _inGame
+        - GameController _controller
+        + Session(GameClient)
+        + void connectToGame(GameController)
+        + void disconnectFromGame()
+        + void close()
+        + void getEvent(byte[])
+        + void getEvent(ByteBuffer)
+        + void sendToClient(ByteBuffer)
+        + Player getPlayer()
+        + GameClient getGameClient()
+    }
+}
+package utilities{
+    class Utilities {
+        + {static} byte GMS2_ENDING
+        + {static} ByteBuffer newBuffer()
+        + {static} ByteBuffer newBuffer(byte[])
+        + {static} void putString(ByteBuffer, String)
+        + {static} void putStringGMS2(ByteBuffer, String)
+        + {static} String getString(ByteBuffer)
+        + {static} String getStringGMS2(ByteBuffer)
+        + {static} void putUUID(ByteBuffer, UUID)
+        + {static} UUID getUUID(ByteBuffer)
+    }
+}
+
+
+EventDecoder - Event : produces >
+
+Event o-- Session
+
+GameController *-- Actor
+GameController - GameEvent : queues and processes >
+GameController -- Session
+
+GameClient *-- Session
+
+GameServer *-- GameClient
+GameServer *-- GameController
+
+Session *-- Player
+
+@enduml

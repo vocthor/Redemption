@@ -44,6 +44,7 @@ else GameEvent
         GameEvent --> GameController : List<Actors>
         loop foreach Actor
             GameController -> EventEncoder : addState()
+            EventEncoder --> GameController : ByteBuffer
             loop foreach Session
                 GameController -> Session : sendToClient()
                 Session -> GameClient : send()

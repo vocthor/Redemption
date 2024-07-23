@@ -19,10 +19,10 @@ public abstract class GameEvent extends Event {
      * Getter of the {@link Player} associated to {@link GameEvent#_session}.
      * 
      * @return (Player) player associated to the session associated to this event.
-     * @see {@link Session#get_player()}.
+     * @see {@link Session#getPlayer()}.
      */
     public Player getPlayer() {
-        return _session.get_player();
+        return _session.getPlayer();
     }
 
     /**

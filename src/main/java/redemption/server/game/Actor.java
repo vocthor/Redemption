@@ -33,7 +33,7 @@ public abstract class Actor {
      * 
      * @return (GameController) controller associated to this Actor.
      */
-    public GameController get_controller() {
+    public GameController getController() {
         return _controller;
     }
 
@@ -42,7 +42,7 @@ public abstract class Actor {
      * 
      * @param controller (GameController) controller associated to this Actor.
      */
-    public void set_controller(GameController controller) {
+    public void setController(GameController controller) {
         this._controller = controller;
     }
 
@@ -51,7 +51,7 @@ public abstract class Actor {
      * 
      * @return (UUID) uuid associated to this Actor.
      */
-    public UUID get_UUID() {
+    public UUID getUUID() {
         return _UUID;
     }
 
@@ -60,7 +60,7 @@ public abstract class Actor {
      * 
      * @param UUID (UUID) uuid to associate to this Actor.
      */
-    public void set_UUID(UUID UUID) {
+    public void setUUID(UUID UUID) {
         this._UUID = UUID;
     }
 

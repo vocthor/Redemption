@@ -116,9 +116,9 @@ public class GameController extends Thread {
      */
     public Player findPlayerByUUID(UUID uuid) {
         log.info("Looking for player with uuid + " + uuid + " ...");
-        List<Player> players = _sessions.stream().map(Session::get_player).collect(Collectors.toList());
+        List<Player> players = _sessions.stream().map(Session::getPlayer).collect(Collectors.toList());
         for (Player p : players) {
-            if (p.get_UUID().equals(uuid)) {
+            if (p.getUUID().equals(uuid)) {
                 log.info("Player with uuid " + uuid + "found : " + p.toString());
                 return p;
             }
@@ -152,8 +152,8 @@ public class GameController extends Thread {
         Session session2 = new Session(null);
         session1.connectToGame(ctr1);
         session2.connectToGame(ctr2);
-        session1.get_player().set_UUID(UUID.fromString("9ef44d92-e203-44dc-8a5d-538638775be3"));
-        session2.get_player().set_UUID(UUID.fromString("b15517f9-d98c-434b-a1b7-0467816901b0"));
+        session1.getPlayer().setUUID(UUID.fromString("9ef44d92-e203-44dc-8a5d-538638775be3"));
+        session2.getPlayer().setUUID(UUID.fromString("b15517f9-d98c-434b-a1b7-0467816901b0"));
         System.out.println(ctr1.findPlayerByUUID(UUID.fromString("9ef44d92-e203-44dc-8a5d-538638775be3")));
         System.out.println(ctr2.findPlayerByUUID(UUID.fromString("9ef44d92-e203-44dc-8a5d-538638775be3")));
 
