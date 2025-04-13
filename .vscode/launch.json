@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Board",
+            "request": "launch",
+            "mainClass": "redemption.redemption.Board",
+            "projectName": "Redemption"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

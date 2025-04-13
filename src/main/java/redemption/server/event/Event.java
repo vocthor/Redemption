@@ -1,5 +1,7 @@
 package redemption.server.event;
 
+import lombok.Getter;
+import lombok.Setter;
 import redemption.server.server.Session;
 
 /**
@@ -9,27 +11,11 @@ public abstract class Event {
     /**
      * {@link Session} associated to this event.
      */
-    protected Session _session;
+    @Getter
+    @Setter
+    protected Session session;
 
     public Event() {
-    }
-
-    /**
-     * Getter of {@link GameEvent#_session}.
-     * 
-     * @return (Session) session associated to this event.
-     */
-    public Session getSession() {
-        return _session;
-    }
-
-    /**
-     * Setter of {@link GameEvent#_session}.
-     * 
-     * @param s (Session) session associated to this event.
-     */
-    public void setSession(Session s) {
-        _session = s;
     }
 
     public String toString() {

@@ -53,7 +53,7 @@ public class GameServer {
 
     private GameServer() {
         _clients = new HashSet<>();
-        _gameController = new GameController(this);
+        _gameController = new GameController();
         _gameController.setDaemon(true);
 
         _running = false;

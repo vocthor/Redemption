@@ -10,16 +10,23 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>Redemption</name>
-  <!-- FIXME change it to the project's website -->
+  <!-- TODO change it to the project's website -->
   <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.11</maven.compiler.source>
     <maven.compiler.target>1.11</maven.compiler.target>
+    <org.springframework.version>5.2.25.RELEASE</org.springframework.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${org.springframework.version}</version>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

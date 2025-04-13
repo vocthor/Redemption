@@ -1,4 +1,4 @@
-@startuml
+@startuml Redemption class diagram
 
 class App
 package event{

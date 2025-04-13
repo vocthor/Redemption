@@ -12,7 +12,7 @@ public class ConnectGameEvent extends NetworkEvent {
         log.info("Processing ConnectGameEvent.");
         GameServer server = GameServer.getInstance();
         try {
-            _session.connectToGame(server.getGameController());
+            session.connectToGame(server.getGameController());
         } catch (Exception e) {
             log.error("Could not connect Session to the GameController.");
         }

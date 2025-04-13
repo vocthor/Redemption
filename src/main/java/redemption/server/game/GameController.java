@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
@@ -23,24 +24,19 @@ import redemption.server.utilities.Utilities;
  * the game / logic you want.
  */
 @Log4j2
-public class GameController extends Thread {
+public abstract class GameController extends Thread {
     /**
      * List of {@link Session} connected to this controller.
      */
     private List<Session> _sessions;
-    /**
-     * {@link GameServer} from where this controller is.
-     */
-    private GameServer _server;
 
     private Queue<GameEvent> _eventQueue;
 
     private final long ROUND_DURATION = 15000;
 
-    public GameController(GameServer s) {
+    public GameController() {
         log.info("Creating new GameController.");
         _sessions = new ArrayList<>();
-        _server = s;
         _eventQueue = new LinkedList<>();
     }
 
@@ -145,9 +141,11 @@ public class GameController extends Thread {
         _sessions.remove(s);
     }
 
+    public abstract Actor getActorByPosition(double positionX, double positionY, double positionZ) throws NoSuchElementException;
+
     public static void main(String[] args) throws Exception {
-        GameController ctr1 = new GameController(null);
-        GameController ctr2 = new GameController(null);
+        GameController ctr1 = new GameController();
+        GameController ctr2 = new GameController();
         Session session1 = new Session(null);
         Session session2 = new Session(null);
         session1.connectToGame(ctr1);
